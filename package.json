@@ -1,5 +1,5 @@
 {
-  "name": "news-app",
+  "name": "ecommerce-nextapp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,10 @@
     "lint-fix": "next lint-fix"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.3",
+    "@mui/material": "^5.8.3",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0"
