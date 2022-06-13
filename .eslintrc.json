@@ -3,5 +3,14 @@
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
-  ]
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "error": {
+    "no-unused-vars": "error",
+    "no-non-null-assertion": "warn"
+  }
 }
