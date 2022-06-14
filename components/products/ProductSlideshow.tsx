@@ -4,29 +4,15 @@ import { FC, useEffect, useRef, useState } from "react"
 import ImageGallery, { ReactImageGalleryProps } from "react-image-gallery"
 
 import "react-image-gallery/styles/css/image-gallery.css"
+import useWindowDimensions from "../../hooks/useWindowDimension"
 
 type Props = {
   images: string[]
 }
 
 export const ProductSlideshow: FC<Props> = ({ images }) => {
-  const [windowDimension, setWindowDimension] = useState<any>(0)
-
-  useEffect(() => {
-    if (typeof window === "undefined") return
-
-    const detectSize = () => {
-      setWindowDimension({
-        width: window.innerWidth,
-        height: window.innerHeight
-      })
-    }
-    window.addEventListener("resize", detectSize)
-
-    return () => {
-      window.removeEventListener("resize", detectSize)
-    }
-  }, [windowDimension])
+  const sizeWindow = useWindowDimensions()
+  console.log(sizeWindow)
 
   const imagesToShow: ReactImageGalleryProps["items"] = [
     {
@@ -40,13 +26,15 @@ export const ProductSlideshow: FC<Props> = ({ images }) => {
   ]
 
   return (
-    <Box>
+    <Box sx={{ transform: "translate(0, -10%) scale(0.85)" }}>
       <ImageGallery
         items={imagesToShow}
         showFullscreenButton={false}
         showPlayButton={false}
         thumbnailPosition={
-          windowDimension === 0 && windowDimension.innerWidth >= 960
+          sizeWindow.width === undefined
+            ? "bottom"
+            : sizeWindow.width > 960
             ? "left"
             : "bottom"
         }
