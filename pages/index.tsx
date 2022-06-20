@@ -1,13 +1,17 @@
 import type { NextPage } from "next"
 import { Typography } from "@mui/material"
-import { ShopLayout } from "../components/layout"
-import { initialData } from "../database/products"
-import { ProductList } from "../components/products"
 
-const Home: NextPage = () => {
+import { useProducts } from "../hooks"
+import { ShopLayout } from "../components/layout"
+import { ProductList } from "../components/products"
+import { Loading } from "../components/ui"
+
+const HomePage: NextPage = () => {
+  const { products, isLoading } = useProducts("/products")
+
   return (
     <ShopLayout
-      title={"Ecommerce - Home"}
+      title={"Ecommerce | Bienvenidos a nuestra tienda en línea"}
       pageDescription={"Encuentra los mejores productos en nuestra tienda"}
     >
       <Typography variant="h1" component="h1">
@@ -17,9 +21,9 @@ const Home: NextPage = () => {
         Todos los productos
       </Typography>
 
-      <ProductList products={initialData.products as any} />
+      {isLoading ? <Loading /> : <ProductList products={products} />}
     </ShopLayout>
   )
 }
 
-export default Home
+export default HomePage
