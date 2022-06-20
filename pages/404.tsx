@@ -4,7 +4,7 @@ import { ShopLayout } from "../components/layout"
 const Custom404 = () => {
   return (
     <ShopLayout
-      title={"Page not found"}
+      title={"Ecommerce | Página no encontrada"}
       pageDescription={"No hay nada que mostrar aquí"}
     >
       <Box
