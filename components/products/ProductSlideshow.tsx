@@ -1,5 +1,5 @@
 import { Box } from "@mui/material"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC } from "react"
 
 import ImageGallery, { ReactImageGalleryProps } from "react-image-gallery"
 
@@ -12,7 +12,6 @@ type Props = {
 
 export const ProductSlideshow: FC<Props> = ({ images }) => {
   const sizeWindow = useWindowDimensions()
-  console.log(sizeWindow)
 
   const imagesToShow: ReactImageGalleryProps["items"] = [
     {
