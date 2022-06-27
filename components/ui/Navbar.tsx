@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import NextLink from "next/link"
 import { useRouter } from "next/router"
+
 import {
   AppBar,
   Badge,
@@ -19,16 +20,15 @@ import {
   ShoppingCartOutlined
 } from "@mui/icons-material"
 
-import { UIContext, CartContext } from "../../context"
+import { CartContext, UiContext } from "../../context"
 
 export const Navbar = () => {
   const { asPath, push } = useRouter()
-  const { toggleSideMenu } = useContext(UIContext)
-  const { numberOfProducts } = useContext(CartContext)
+  const { toggleSideMenu } = useContext(UiContext)
+  const { numberOfItems } = useContext(CartContext)
+
   const [searchTerm, setSearchTerm] = useState("")
   const [isSearchVisible, setIsSearchVisible] = useState(false)
-
-  const handleClickMenu = () => toggleSideMenu()
 
   const onSearchTerm = () => {
     if (searchTerm.trim().length === 0) return
@@ -36,11 +36,11 @@ export const Navbar = () => {
   }
 
   return (
-    <AppBar position="static">
+    <AppBar>
       <Toolbar>
         <NextLink href="/" passHref>
           <Link display="flex" alignItems="center">
-            <Typography variant="h6">Logo here!</Typography>
+            <Typography variant="h6">Teslo |</Typography>
             <Typography sx={{ ml: 0.5 }}>Shop</Typography>
           </Link>
         </NextLink>
@@ -51,6 +51,7 @@ export const Navbar = () => {
           sx={{
             display: isSearchVisible ? "none" : { xs: "none", sm: "block" }
           }}
+          className="fadeIn"
         >
           <NextLink href="/category/men" passHref>
             <Link>
@@ -77,6 +78,7 @@ export const Navbar = () => {
 
         <Box flex={1} />
 
+        {/* Pantallas pantallas grandes */}
         {isSearchVisible ? (
           <Input
             sx={{ display: { xs: "none", sm: "flex" } }}
@@ -117,7 +119,7 @@ export const Navbar = () => {
           <Link>
             <IconButton>
               <Badge
-                badgeContent={numberOfProducts > 9 ? "+9" : numberOfProducts}
+                badgeContent={numberOfItems > 9 ? "+9" : numberOfItems}
                 color="secondary"
               >
                 <ShoppingCartOutlined />
@@ -126,7 +128,7 @@ export const Navbar = () => {
           </Link>
         </NextLink>
 
-        <Button onClick={handleClickMenu}>Menu</Button>
+        <Button onClick={toggleSideMenu}>Menú</Button>
       </Toolbar>
     </AppBar>
   )

@@ -1,18 +1,20 @@
 import type { NextPage } from "next"
 import { Typography } from "@mui/material"
 
-import { useProducts } from "../hooks"
-import { ShopLayout } from "../components/layout"
+import { ShopLayout } from "../components/layouts"
+
 import { ProductList } from "../components/products"
-import { Loading } from "../components/ui"
+import { useProducts } from "../hooks"
+
+import { FullScreenLoading } from "../components/ui"
 
 const HomePage: NextPage = () => {
   const { products, isLoading } = useProducts("/products")
 
   return (
     <ShopLayout
-      title={"Ecommerce | Bienvenidos a nuestra tienda en línea"}
-      pageDescription={"Encuentra los mejores productos en nuestra tienda"}
+      title={"Teslo-Shop - Home"}
+      pageDescription={"Encuentra los mejores productos de Teslo aquí"}
     >
       <Typography variant="h1" component="h1">
         Tienda
@@ -21,7 +23,7 @@ const HomePage: NextPage = () => {
         Todos los productos
       </Typography>
 
-      {isLoading ? <Loading /> : <ProductList products={products} />}
+      {isLoading ? <FullScreenLoading /> : <ProductList products={products} />}
     </ShopLayout>
   )
 }

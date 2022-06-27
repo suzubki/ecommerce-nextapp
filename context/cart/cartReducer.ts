@@ -1,29 +1,22 @@
+import { CartState, ShippingAddress } from "./"
 import { ICartProduct } from "../../interfaces"
-import { CartState } from "./CartProvider"
 
 type CartActionType =
   | {
       type: "[Cart] - LoadCart from cookies | storage"
       payload: ICartProduct[]
     }
-  | {
-      type: "[Cart] - Update products in cart"
-      payload: ICartProduct[]
-    }
-  | {
-      type: "[Cart] - Change cart quantity"
-      payload: ICartProduct
-    }
-  | {
-      type: "[Cart] - Remove product from cart"
-      payload: ICartProduct
-    }
+  | { type: "[Cart] - Update products in cart"; payload: ICartProduct[] }
+  | { type: "[Cart] - Change cart quantity"; payload: ICartProduct }
+  | { type: "[Cart] - Remove product in cart"; payload: ICartProduct }
+  | { type: "[Cart] - LoadAddress from Cookies"; payload: ShippingAddress }
+  | { type: "[Cart] - Update Address"; payload: ShippingAddress }
   | {
       type: "[Cart] - Update order summary"
       payload: {
-        numberOfProducts: number
+        numberOfItems: number
         subTotal: number
-        taxRate: number
+        tax: number
         total: number
       }
     }
@@ -34,10 +27,17 @@ export const cartReducer = (
 ): CartState => {
   switch (action.type) {
     case "[Cart] - LoadCart from cookies | storage":
-      return { ...state, cart: [...action.payload] }
+      return {
+        ...state,
+        isLoaded: true,
+        cart: [...action.payload]
+      }
 
     case "[Cart] - Update products in cart":
-      return { ...state, cart: [...action.payload] }
+      return {
+        ...state,
+        cart: [...action.payload]
+      }
 
     case "[Cart] - Change cart quantity":
       return {
@@ -45,12 +45,11 @@ export const cartReducer = (
         cart: state.cart.map(product => {
           if (product._id !== action.payload._id) return product
           if (product.size !== action.payload.size) return product
-
           return action.payload
         })
       }
 
-    case "[Cart] - Remove product from cart":
+    case "[Cart] - Remove product in cart":
       return {
         ...state,
         cart: state.cart.filter(
@@ -68,7 +67,14 @@ export const cartReducer = (
         ...action.payload
       }
 
+    case "[Cart] - Update Address":
+    case "[Cart] - LoadAddress from Cookies":
+      return {
+        ...state,
+        shippingAddress: action.payload
+      }
+
     default:
-      return { ...state }
+      return state
   }
 }

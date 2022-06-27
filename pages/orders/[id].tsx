@@ -1,109 +1,91 @@
 import NextLink from "next/link"
+
 import {
-  Typography,
-  Grid,
+  Link,
+  Box,
   Card,
   CardContent,
   Divider,
-  Box,
-  Button,
-  Link,
+  Grid,
+  Typography,
   Chip
 } from "@mui/material"
+import { CreditCardOffOutlined, CreditScoreOutlined } from "@mui/icons-material"
 
+import { ShopLayout } from "../../components/layouts/ShopLayout"
 import { CartList, OrderSummary } from "../../components/cart"
-import { ShopLayout } from "../../components/layout"
-import { CreditCardOffOutlined, CreditCardOutlined } from "@mui/icons-material"
 
 const OrderPage = () => {
   return (
     <ShopLayout
-      title="Resumen de la orden xxxxxxxxx"
-      pageDescription="Resumen de la orden de compras de los productos que se han seleccionado"
+      title="Resumen de la orden 123671523"
+      pageDescription={"Resumen de la orden"}
     >
       <Typography variant="h1" component="h1">
         Orden: ABC123
       </Typography>
 
+      {/* <Chip 
+            sx={{ my: 2 }}
+            label="Pendiente de pago"
+            variant='outlined'
+            color="error"
+            icon={ <CreditCardOffOutlined /> }
+        /> */}
       <Chip
         sx={{ my: 2 }}
-        label="Orden pendiente de pago"
-        variant="outlined"
-        color="error"
-        icon={<CreditCardOffOutlined />}
-      />
-      <Chip
-        sx={{ my: 2 }}
-        label="Orden pagada"
+        label="Orden ya fue pagada"
         variant="outlined"
         color="success"
-        icon={<CreditCardOutlined />}
+        icon={<CreditScoreOutlined />}
       />
 
-      <Grid container marginTop={2}>
-        <Grid item xs={12} sm={6}>
-          {/* CartList */}
-          <CartList editable={false} />
+      <Grid container>
+        <Grid item xs={12} sm={7}>
+          <CartList />
         </Grid>
-        <Grid item xs={12} sm={1} />
         <Grid item xs={12} sm={5}>
-          {/* CartList - Payment */}
           <Card className="summary-card">
             <CardContent>
-              <Typography variant="h2">Resumen de compras</Typography>
+              <Typography variant="h2">Resumen (3 productos)</Typography>
               <Divider sx={{ my: 1 }} />
 
-              {/* Update order list */}
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                sx={{ marginTop: 2 }}
-              >
+              <Box display="flex" justifyContent="space-between">
                 <Typography variant="subtitle1">
                   Dirección de entrega
                 </Typography>
                 <NextLink href="/checkout/address" passHref>
-                  <Link underline="always">Editar datos</Link>
+                  <Link underline="always">Editar</Link>
                 </NextLink>
               </Box>
 
-              {/* User data */}
-              <Typography>Darwin Narro</Typography>
-              <Typography>Mz B3 LT.15 Villa la Alborada</Typography>
-              <Typography>Lima, Pte. Piedra</Typography>
-              <Typography>Perú</Typography>
-              <Typography>+51 922860113</Typography>
+              <Typography>Fernando Herrera</Typography>
+              <Typography>323 Algun lugar</Typography>
+              <Typography>Stittsville, HYA 23S</Typography>
+              <Typography>Canadá</Typography>
+              <Typography>+1 23123123</Typography>
 
-              <Divider sx={{ marginTop: 3 }} />
+              <Divider sx={{ my: 1 }} />
 
-              {/* Shopping cart data */}
-              {/* Title */}
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                sx={{ marginTop: 2 }}
-              >
-                <Typography variant="subtitle1">Compras</Typography>
+              <Box display="flex" justifyContent="end">
                 <NextLink href="/cart" passHref>
-                  <Link underline="always">Ir al carrito de compras</Link>
+                  <Link underline="always">Editar</Link>
                 </NextLink>
               </Box>
-              {/* Cart Order Summary */}
+
               <OrderSummary />
 
-              <h1>Pagar...</h1>
-              <Chip
-                sx={{ my: 2 }}
-                label="Orden pagada"
-                variant="outlined"
-                color="success"
-                icon={<CreditCardOutlined />}
-              />
-              {/* Confirm payment */}
               <Box sx={{ mt: 3 }}>
-                <Button color="primary" className="circular-btn" fullWidth>
-                  Confirmar orden
-                </Button>
+                {/* TODO */}
+                <h1>Pagar</h1>
+
+                <Chip
+                  sx={{ my: 2 }}
+                  label="Orden ya fue pagada"
+                  variant="outlined"
+                  color="success"
+                  icon={<CreditScoreOutlined />}
+                />
               </Box>
             </CardContent>
           </Card>

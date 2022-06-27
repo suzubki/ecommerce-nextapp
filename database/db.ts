@@ -10,7 +10,6 @@ const mongoConnection = {
   isConnected: 0
 }
 
-// TODO: Eliminar los console.log reforzarlo con eslint
 export const connect = async () => {
   if (mongoConnection.isConnected) {
     console.log("Ya estabamos conectados")
@@ -21,16 +20,13 @@ export const connect = async () => {
     mongoConnection.isConnected = mongoose.connections[0].readyState
 
     if (mongoConnection.isConnected === 1) {
-      console.log("Usando conexión anterior, estamos conectados :D")
+      console.log("Usando conexión anterior")
       return
     }
 
     await mongoose.disconnect()
   }
 
-  // TODO: Cambiar a configuración de producción
-  // TODO: Cambiar a configuración de desarrollo
-  // TODO: Cambiar a configuración de local
   await mongoose.connect(process.env.MONGO_URL || "")
   mongoConnection.isConnected = 1
   console.log("Conectado a MongoDB:", process.env.MONGO_URL)

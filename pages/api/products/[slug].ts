@@ -1,14 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { db } from "../../../database"
-import { IProduct } from "../../../interfaces"
 import { Product } from "../../../models"
+import { IProduct } from "../../../interfaces"
 
-// TODO: Arreglar type data
-type Data =
-  | {
-      message?: string
-    }
-  | IProduct
+type Data = { message: string } | IProduct
 
 export default function handler(
   req: NextApiRequest,
@@ -20,21 +15,18 @@ export default function handler(
 
     default:
       return res.status(400).json({
-        message: "Petición inválida"
+        message: "Bad request"
       })
   }
 }
 
-const getProductBySlug = async (
+async function getProductBySlug(
   req: NextApiRequest,
   res: NextApiResponse<Data>
-) => {
-  const { slug } = req.query
-
+) {
   await db.connect()
-
+  const { slug } = req.query
   const product = await Product.findOne({ slug }).lean()
-
   await db.disconnect()
 
   if (!product) {
@@ -43,5 +35,5 @@ const getProductBySlug = async (
     })
   }
 
-  return res.status(200).json(product)
+  return res.json(product)
 }

@@ -1,15 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { db, SHOP_CONSTANTS } from "../../../database"
-import { IProduct } from "../../../interfaces"
 import { Product } from "../../../models"
+import { IProduct } from "../../../interfaces/products"
 
-// TODO: Arreglar type data
-type Data =
-  | {
-      name?: string
-      message?: string
-    }
-  | IProduct[]
+type Data = { message: string } | IProduct[]
 
 export default function handler(
   req: NextApiRequest,
@@ -20,8 +14,8 @@ export default function handler(
       return getProducts(req, res)
 
     default:
-      res.status(400).json({
-        message: "Petición inválida"
+      return res.status(400).json({
+        message: "Bad request"
       })
   }
 }
@@ -29,7 +23,6 @@ export default function handler(
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { gender = "all" } = req.query
 
-  // Si es vacío entonces Product.find({}) genera todos los productos
   let condition = {}
 
   if (gender !== "all" && SHOP_CONSTANTS.validGenders.includes(`${gender}`)) {
@@ -37,7 +30,6 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   }
 
   await db.connect()
-
   const products = await Product.find(condition)
     .select("title images price inStock slug -_id")
     .lean()

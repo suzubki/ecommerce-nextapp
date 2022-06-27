@@ -1,5 +1,5 @@
 import { useContext, useState } from "react"
-import { useRouter } from "next/router"
+
 import {
   Box,
   Divider,
@@ -26,27 +26,29 @@ import {
   VpnKeyOutlined
 } from "@mui/icons-material"
 
-import { UIContext } from "../../context"
+import { UiContext, AuthContext } from "../../context"
+import { useRouter } from "next/router"
 
 export const SideMenu = () => {
-  const [searchTerm, setSearchTerm] = useState("")
-  const { isSideMenuOpen, toggleSideMenu } = useContext(UIContext)
   const router = useRouter()
+  const { isMenuOpen, toggleSideMenu } = useContext(UiContext)
+  const { user, isLoggedIn, logout } = useContext(AuthContext)
+
+  const [searchTerm, setSearchTerm] = useState("")
 
   const onSearchTerm = () => {
-    if (searchTerm.trim().length < 2) return
-
+    if (searchTerm.trim().length === 0) return
     navigateTo(`/search/${searchTerm}`)
   }
 
-  const navigateTo = (path: string) => {
+  const navigateTo = (url: string) => {
     toggleSideMenu()
-    router.push(`${path}`)
+    router.push(url)
   }
 
   return (
     <Drawer
-      open={isSideMenuOpen}
+      open={isMenuOpen}
       anchor="right"
       sx={{ backdropFilter: "blur(4px)", transition: "all 0.5s ease-out" }}
       onClose={toggleSideMenu}
@@ -55,11 +57,12 @@ export const SideMenu = () => {
         <List>
           <ListItem>
             <Input
+              autoFocus
               value={searchTerm}
+              onChange={e => setSearchTerm(e.target.value)}
+              onKeyPress={e => (e.key === "Enter" ? onSearchTerm() : null)}
               type="text"
               placeholder="Buscar..."
-              onChange={e => setSearchTerm(e.target.value)}
-              onKeyPress={e => e.key === "Enter" && onSearchTerm()}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton onClick={onSearchTerm}>
@@ -70,19 +73,23 @@ export const SideMenu = () => {
             />
           </ListItem>
 
-          <ListItem button>
-            <ListItemIcon>
-              <AccountCircleOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Perfil"} />
-          </ListItem>
+          {isLoggedIn && (
+            <>
+              <ListItem button>
+                <ListItemIcon>
+                  <AccountCircleOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Perfil"} />
+              </ListItem>
 
-          <ListItem button>
-            <ListItemIcon>
-              <ConfirmationNumberOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Mis Ordenes"} />
-          </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  <ConfirmationNumberOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Mis Ordenes"} />
+              </ListItem>
+            </>
+          )}
 
           <ListItem
             button
@@ -117,43 +124,52 @@ export const SideMenu = () => {
             <ListItemText primary={"Niños"} />
           </ListItem>
 
-          <ListItem button>
-            <ListItemIcon>
-              <VpnKeyOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Ingresar"} />
-          </ListItem>
-
-          <ListItem button>
-            <ListItemIcon>
-              <LoginOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Salir"} />
-          </ListItem>
+          {isLoggedIn ? (
+            <ListItem button onClick={logout}>
+              <ListItemIcon>
+                <LoginOutlined />
+              </ListItemIcon>
+              <ListItemText primary={"Salir"} />
+            </ListItem>
+          ) : (
+            <ListItem
+              button
+              onClick={() => navigateTo(`/auth/login?p=${router.asPath}`)}
+            >
+              <ListItemIcon>
+                <VpnKeyOutlined />
+              </ListItemIcon>
+              <ListItemText primary={"Ingresar"} />
+            </ListItem>
+          )}
 
           {/* Admin */}
-          <Divider />
-          <ListSubheader>Admin Panel</ListSubheader>
+          {user?.role === "admin" && (
+            <>
+              <Divider />
+              <ListSubheader>Admin Panel</ListSubheader>
 
-          <ListItem button>
-            <ListItemIcon>
-              <CategoryOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Productos"} />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <ConfirmationNumberOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Ordenes"} />
-          </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  <CategoryOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Productos"} />
+              </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  <ConfirmationNumberOutlined />
+                </ListItemIcon>
+                <ListItemText primary={"Ordenes"} />
+              </ListItem>
 
-          <ListItem button>
-            <ListItemIcon>
-              <AdminPanelSettings />
-            </ListItemIcon>
-            <ListItemText primary={"Usuarios"} />
-          </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  <AdminPanelSettings />
+                </ListItemIcon>
+                <ListItemText primary={"Usuarios"} />
+              </ListItem>
+            </>
+          )}
         </List>
       </Box>
     </Drawer>

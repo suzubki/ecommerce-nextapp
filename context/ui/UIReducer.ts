@@ -1,13 +1,14 @@
-import { UIState } from "./UIProvider"
+import { UiState } from "./"
 
-type UITypeAction = {
-  type: "[UI] - Toggle Side Menu"
-}
+type UiActionType = { type: "[UI] - ToggleMenu" }
 
-export const UIReducer = (state: UIState, action: UITypeAction): UIState => {
+export const uiReducer = (state: UiState, action: UiActionType): UiState => {
   switch (action.type) {
-    case "[UI] - Toggle Side Menu":
-      return { ...state, isSideMenuOpen: !state.isSideMenuOpen }
+    case "[UI] - ToggleMenu":
+      return {
+        ...state,
+        isMenuOpen: !state.isMenuOpen
+      }
 
     default:
       return state

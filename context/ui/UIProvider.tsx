@@ -1,29 +1,31 @@
-import { FC, ReactElement, useReducer } from "react"
+import { FC, useReducer } from "react"
+import { UiContext, uiReducer } from "./"
 
-import { UIReducer, UIContext } from "./"
-
-export interface UIState {
-  isSideMenuOpen: boolean
+export interface UiState {
+  isMenuOpen: boolean
 }
 
-interface Props {
-  children: ReactElement
+const UI_INITIAL_STATE: UiState = {
+  isMenuOpen: false
 }
 
-const UI_INITIAL_STATE: UIState = {
-  isSideMenuOpen: false
-}
-
-export const UIProvider: FC<Props> = ({ children }) => {
-  const [state, dispatch] = useReducer(UIReducer, UI_INITIAL_STATE)
+export const UiProvider: FC = ({ children }) => {
+  const [state, dispatch] = useReducer(uiReducer, UI_INITIAL_STATE)
 
   const toggleSideMenu = () => {
-    dispatch({ type: "[UI] - Toggle Side Menu" })
+    dispatch({ type: "[UI] - ToggleMenu" })
   }
 
   return (
-    <UIContext.Provider value={{ ...state, toggleSideMenu }}>
+    <UiContext.Provider
+      value={{
+        ...state,
+
+        // Methods
+        toggleSideMenu
+      }}
+    >
       {children}
-    </UIContext.Provider>
+    </UiContext.Provider>
   )
 }

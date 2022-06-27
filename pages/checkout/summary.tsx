@@ -1,79 +1,98 @@
+import { useContext } from "react"
 import NextLink from "next/link"
+
 import {
-  Typography,
-  Grid,
+  Link,
+  Box,
+  Button,
   Card,
   CardContent,
   Divider,
-  Box,
-  Button,
-  Link
+  Grid,
+  Typography
 } from "@mui/material"
+
+import { CartContext } from "../../context"
+import { ShopLayout } from "../../components/layouts/ShopLayout"
 import { CartList, OrderSummary } from "../../components/cart"
-import { ShopLayout } from "../../components/layout"
+import { countries } from "../../utils"
 
 const SummaryPage = () => {
+  const { shippingAddress, numberOfItems } = useContext(CartContext)
+  if (!shippingAddress) {
+    return <></>
+  }
+
+  const {
+    firstName,
+    lastName,
+    address,
+    address2 = "",
+    city,
+    country,
+    phone,
+    zip
+  } = shippingAddress
+
   return (
     <ShopLayout
-      title="Resumen de la orden"
-      pageDescription="Resumen de la orden de compras de los productos que se han seleccionado"
+      title="Resumen de orden"
+      pageDescription={"Resumen de la orden"}
     >
       <Typography variant="h1" component="h1">
-        Carrito de compras
+        Resumen de la orden
       </Typography>
 
-      <Grid container marginTop={2}>
-        <Grid item xs={12} sm={6}>
-          {/* CartList */}
-          <CartList editable={false} />
+      <Grid container>
+        <Grid item xs={12} sm={7}>
+          <CartList />
         </Grid>
-        <Grid item xs={12} sm={1} />
         <Grid item xs={12} sm={5}>
-          {/* CartList - Payment */}
           <Card className="summary-card">
             <CardContent>
-              <Typography variant="h2">Resumen de compras</Typography>
+              <Typography variant="h2">
+                Resumen ({numberOfItems}{" "}
+                {numberOfItems === 1 ? "producto" : "productos"})
+              </Typography>
               <Divider sx={{ my: 1 }} />
 
-              {/* Update order list */}
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                sx={{ marginTop: 2 }}
-              >
+              <Box display="flex" justifyContent="space-between">
                 <Typography variant="subtitle1">
                   Dirección de entrega
                 </Typography>
                 <NextLink href="/checkout/address" passHref>
-                  <Link underline="always">Editar datos</Link>
+                  <Link underline="always">Editar</Link>
                 </NextLink>
               </Box>
 
-              {/* User data */}
-              <Typography>Darwin Narro</Typography>
-              <Typography>Mz B3 LT.15 Villa la Alborada</Typography>
-              <Typography>Lima, Pte. Piedra</Typography>
-              <Typography>Perú</Typography>
-              <Typography>+51 922860113</Typography>
+              <Typography>
+                {firstName} {lastName}
+              </Typography>
+              <Typography>
+                {address}
+                {address2 ? `, ${address2}` : ""}{" "}
+              </Typography>
+              <Typography>
+                {city}, {zip}
+              </Typography>
+              <Typography>
+                {countries.find(c => c.code === country)?.name}
+              </Typography>
+              <Typography>{phone}</Typography>
 
-              <Divider sx={{ marginTop: 3 }} />
+              <Divider sx={{ my: 1 }} />
 
-              {/* Shopping cart data */}
-              {/* Cart Order Summary */}
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                sx={{ marginTop: 2 }}
-              >
-                <Typography variant="subtitle1">Compras</Typography>
+              <Box display="flex" justifyContent="end">
                 <NextLink href="/cart" passHref>
-                  <Link underline="always">Ir al carrito de compras</Link>
+                  <Link underline="always">Editar</Link>
                 </NextLink>
               </Box>
+
               <OrderSummary />
+
               <Box sx={{ mt: 3 }}>
-                <Button color="primary" className="circular-btn" fullWidth>
-                  Confirmar orden
+                <Button color="secondary" className="circular-btn" fullWidth>
+                  Confirmar Orden
                 </Button>
               </Box>
             </CardContent>

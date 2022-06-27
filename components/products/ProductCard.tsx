@@ -1,18 +1,19 @@
 import { FC, useMemo, useState } from "react"
+import NextLink from "next/link"
 import {
-  Box,
+  Grid,
   Card,
   CardActionArea,
   CardMedia,
-  Chip,
-  Grid,
+  Box,
+  Typography,
   Link,
-  Typography
+  Chip
 } from "@mui/material"
-import { IProduct } from "../../interfaces"
-import NextLink from "next/link"
 
-type Props = {
+import { IProduct } from "../../interfaces"
+
+interface Props {
   product: IProduct
 }
 
@@ -27,30 +28,33 @@ export const ProductCard: FC<Props> = ({ product }) => {
   }, [isHovered, product.images])
 
   return (
-    <Grid item xs={6} sm={4}>
-      <Card
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
+    <Grid
+      item
+      xs={6}
+      sm={4}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <Card>
         <NextLink href={`/product/${product.slug}`} passHref prefetch={false}>
           <Link>
             <CardActionArea>
               {product.inStock === 0 && (
                 <Chip
+                  color="primary"
+                  label="No hay disponibles"
                   sx={{
                     position: "absolute",
                     zIndex: 99,
                     top: "10px",
-                    left: "-10px",
-                    transform: "rotate(-45deg)"
+                    left: "10px"
                   }}
-                  color="primary"
-                  label="Sin stock"
                 />
               )}
+
               <CardMedia
-                className="fadeIn"
                 component="img"
+                className="fadeIn"
                 image={productImage}
                 alt={product.title}
                 onLoad={() => setIsImageLoaded(true)}
@@ -65,7 +69,7 @@ export const ProductCard: FC<Props> = ({ product }) => {
         className="fadeIn"
       >
         <Typography fontWeight={700}>{product.title}</Typography>
-        <Typography fontWeight={500}>${product.price}</Typography>
+        <Typography fontWeight={500}>{`$${product.price}`}</Typography>
       </Box>
     </Grid>
   )
